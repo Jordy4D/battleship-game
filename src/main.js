@@ -5,6 +5,7 @@ export function testFn(num) {
 export class Ship {
     constructor(length) {
         this.length = length;
+        this.coords = []
         this.hits = 0;
         this.sunk = false;
     }
@@ -34,7 +35,23 @@ export class Gameboard {
         this.board = Array(size).fill(null).map(() => Array(size).fill(0));
     }
 
+    //creates new ship at coordinates based on direction (vertical/horizontal)
+    //coordinate provided should be the "front" of the ship
+    placeShip(row, col, dir) {
+
+    }
+
+    // 0 = empty space; 1 = ship; 2 = hit ship; 3 = sunken ship; 4 = missed attack
     receiveAttack(row, col) {
-        
+        const atk = this.board[row][col]
+
+        // missed attack
+        if (atk === 0) {
+            this.board[row][col] = 4
+        }
+
+        if (atk === 1) {
+
+        }
     }
 }
