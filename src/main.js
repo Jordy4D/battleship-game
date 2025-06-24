@@ -29,34 +29,93 @@ export class Ship {
 export class Gameboard {
     constructor() {
         this.board = [];
-        this.ships = 0
+        this.shipCount = 0
+        this.ships = []
     }
 
-    createBoard(size, ships) {
+    createBoard(size, shipCount) {
         this.board = Array(size).fill(null).map(() => Array(size).fill(0));
 
-        this.ships = ships
+        this.shipCount = shipCount
     }
 
     //creates new ship at coordinates based on direction (vertical/horizontal)
     //coordinate provided should be the "front" of the ship
     //Do we notate specific ships placed in the gameboard?
-    placeShip(length, row, col, dir) {
-        const ship = new Ship(length)
-
-        this.board[row][col] = 1
+    placeShip(row, col, length, dir) {
         
+        const validV = this.__validateVertPlacement(row, col, length)
+        const validH = this.__validateHorPlacement(row, col, length)
+        
+        if (validV === false || validH === false) {
+            return alert('cannot place ship')
+        }
+        
+        const ship = new Ship(length)
+        
+        
+        this.board[row][col] = 1 // consolidate this step into loop like validator methods
+        
+
+
+        ship.coords.push([row, col])
+
         //going to need to add edge limits for ship length, board edges, 
         // and already placed ships
         if (dir === v) {
             for (let x = 0; x < length; x++) {
-                this.board[row + 1][col] = 1
+                this.board[row][col + 1] = 1
             }
         } else if (dir === h) {
             for (let x = 0; x < length; x++) {
-                this.board[row][col + 1] = 1
+                this.board[row + 1][col] = 1
             }
         }
+    }
+
+    __validateHorPlacement(row, col, length) {
+
+        // add board edge validation
+
+
+        for (let x = row; x <= row + length; x++) {
+            
+            // make sure to return which coordinate is occupied in testing
+            if (this.board[x][col] !== 0) {
+                return false
+            } 
+            
+            
+            
+            }
+        
+        return true
+        
+    
+
+    }
+
+    __validateVertPlacement(row, col, length) {
+
+
+        // add board edge validation
+
+
+        for (let x = col; x <= col + length; x++) {
+            
+            
+            if (this.board[row][x] !== 0) {
+                return false
+            } 
+            
+            
+            
+            }
+        
+        return true
+        
+    
+
     }
 
     // 0 = empty space; 1 = ship; 2 = hit ship; 3 = sunken ship; 4 = missed attack
