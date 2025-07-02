@@ -1,4 +1,5 @@
-import { testFn, Ship } from "../src/main.js"
+import { testFn, Ship, Gameboard } from "../src/main.js"
+
 
 test('adds 1 + 2 to equal 3', () => {
   expect(1 + 2).toBe(3);
@@ -26,3 +27,31 @@ test('checks Ship methods', () => {
     newShip.isSunk()
     expect(newShip.sunk).toBe(true)
 })
+
+//test not completed
+test('checks gameboard class methods', () => {
+    const testBoard = new Gameboard()
+    testBoard.createBoard(5, 3)
+
+    expect(testBoard.board).toBe([
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ]
+                                ])
+                            
+    expect(testBoard.placeShip(1, 2, 3, "h")).toBe(true)
+
+    // testBoard.hit()
+    // expect(testBoard.).toBe(1)
+    // testBoard.hit()
+    // expect(testBoard.).toBe(2)
+    // testBoard.hit()
+    // expect(testBoard.).toBe(3)
+    
+    // testBoard.isSunk()
+    // expect(testBoard.).toBe(true)
+})
+
+

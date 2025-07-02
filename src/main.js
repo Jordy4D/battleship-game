@@ -56,19 +56,18 @@ export class Gameboard {
         
         this.board[row][col] = 1 // consolidate this step into loop like validator methods
         
-
-
+        
         ship.coords.push([row, col])
 
         //going to need to add edge limits for ship length, board edges, 
         // and already placed ships
-        if (dir === v) {
-            for (let x = 0; x < length; x++) {
-                this.board[row][col + 1] = 1
+        if (dir === "v") {
+            for (let x = col; x <= col + length; x++) {
+                this.board[row][x + 1] = 1
             }
-        } else if (dir === h) {
-            for (let x = 0; x < length; x++) {
-                this.board[row + 1][col] = 1
+        } else if (dir === "h") {
+            for (let x = row; x <= row + length; x++) {
+                this.board[x + 1][col] = 1
             }
         }
     }
@@ -132,3 +131,4 @@ export class Gameboard {
         }
     }
 }
+
