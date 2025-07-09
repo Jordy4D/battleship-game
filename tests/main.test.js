@@ -33,15 +33,66 @@ test('checks gameboard class methods', () => {
     const testBoard = new Gameboard()
     testBoard.createBoard(5, 3)
 
-    expect(testBoard.board).toBe([
+    expect(testBoard.board).toEqual(expect.arrayContaining([
                                     [ 0, 0, 0, 0, 0, ],
                                     [ 0, 0, 0, 0, 0, ],
                                     [ 0, 0, 0, 0, 0, ],
                                     [ 0, 0, 0, 0, 0, ],
                                     [ 0, 0, 0, 0, 0, ]
-                                ])
-                            
-    expect(testBoard.placeShip(1, 2, 3, "h")).toBe(true)
+                                ]));
+    
+    expect(testBoard.__validateHorPlacement(1, 2, 3)).toBe(true)
+    expect(testBoard.__validateVertPlacement(1, 2, 3)).toBe(true)
+
+    
+    testBoard.placeShip(1, 2, 3, "h")              
+    
+    expect(testBoard.board).toEqual(expect.arrayContaining([
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 1, 1, 1, ],
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ]
+                                ]));
+
+    testBoard.placeShip(0, 1, 4, "v")              
+
+
+    expect(testBoard.board).toEqual(expect.arrayContaining([
+                                    [ 0, 1, 0, 0, 0, ],
+                                    [ 0, 1, 1, 1, 1, ],
+                                    [ 0, 1, 0, 0, 0, ],
+                                    [ 0, 1, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ]
+                                ]));
+
+    testBoard.placeShip(0, 2, 3, "h")              
+
+
+    expect(testBoard.board).toEqual(expect.arrayContaining([
+                                    [ 0, 1, 0, 0, 0, ],
+                                    [ 0, 1, 1, 1, 1, ],
+                                    [ 0, 1, 0, 0, 0, ],
+                                    [ 0, 1, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ]
+                                ]));
+
+    testBoard.placeShip(2, 0, 3, "v")              
+
+
+    expect(testBoard.board).toEqual(expect.arrayContaining([
+                                    [ 0, 1, 0, 0, 0, ],
+                                    [ 0, 1, 1, 1, 1, ],
+                                    [ 0, 1, 0, 0, 0, ],
+                                    [ 0, 1, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ]
+                                ]));                            
+
+    testBoard.receiveAttack(1, 2)
+    testBoard.receiveAttack(2, 0)
+
+    expect(testBoard.board[1][2]).toBe(2) // 2 = hit ship
+    expect(testBoard.board[2][0]).toBe(4) // 2 = hit ship
 
     // testBoard.hit()
     // expect(testBoard.).toBe(1)

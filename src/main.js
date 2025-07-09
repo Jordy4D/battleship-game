@@ -48,7 +48,9 @@ export class Gameboard {
         const validH = this.__validateHorPlacement(row, col, length)
         
         if (validV === false || validH === false) {
-            return alert('cannot place ship')
+            return 
+        // alert('cannot place ship')
+        
         }
         
         const ship = new Ship(length)
@@ -61,12 +63,12 @@ export class Gameboard {
 
         //going to need to add edge limits for ship length, board edges, 
         // and already placed ships
-        if (dir === "v") {
-            for (let x = col; x <= col + length; x++) {
+        if (dir === "h") {
+            for (let x = col; x < col + length - 1; x++) {
                 this.board[row][x + 1] = 1
             }
-        } else if (dir === "h") {
-            for (let x = row; x <= row + length; x++) {
+        } else if (dir === "v") {
+            for (let x = row; x < row + length - 1; x++) {
                 this.board[x + 1][col] = 1
             }
         }
@@ -77,7 +79,7 @@ export class Gameboard {
         // add board edge validation
 
 
-        for (let x = row; x <= row + length; x++) {
+        for (let x = row; x < row + length; x++) {
             
             // make sure to return which coordinate is occupied in testing
             if (this.board[x][col] !== 0) {
@@ -100,15 +102,14 @@ export class Gameboard {
         // add board edge validation
 
 
-        for (let x = col; x <= col + length; x++) {
+        for (let x = col; x < col + length; x++) {
             
             
             if (this.board[row][x] !== 0) {
                 return false
-            } 
-            
-            
-            
+            }
+
+
             }
         
         return true
@@ -127,7 +128,7 @@ export class Gameboard {
         }
 
         if (atk === 1) {
-
+            this.board[row][col] = 2
         }
     }
 }
