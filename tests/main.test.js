@@ -118,7 +118,36 @@ test('checks gameboard class methods', () => {
                                 ]));   
 
     
+    testBoard.receiveAttack(0, 1) //destroyer hit
+    testBoard.receiveAttack(1, 1) //destroyer hit
 
+        expect(testBoard.board).toEqual(expect.arrayContaining([
+                                    [ 0, ["destroyer", 2], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 2], ["santaMaria", 2], ["santaMaria", 1], ["santaMaria", 1], ],
+                                    [ 4, ["destroyer", 1], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ]
+                                ])); 
+
+    testBoard.receiveAttack(2, 1) //destroyer hit
+
+    expect(testBoard.board).toEqual(expect.arrayContaining([
+                                    [ 0, ["destroyer", 2], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 2], ["santaMaria", 2], ["santaMaria", 1], ["santaMaria", 1], ],
+                                    [ 4, ["destroyer", 2], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ]
+                                ]));
+
+    testBoard.receiveAttack(3, 1) //destroyer hit
+
+    expect(testBoard.board).toEqual(expect.arrayContaining([
+                                    [ 0, ["destroyer", 3], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 3], ["santaMaria", 2], ["santaMaria", 1], ["santaMaria", 1], ],
+                                    [ 4, ["destroyer", 3], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 3], 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ]
+                                ]));
 
     // testBoard.hit()
     // expect(testBoard.).toBe(1)

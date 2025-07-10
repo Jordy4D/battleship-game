@@ -149,7 +149,8 @@ export class Gameboard {
                     ship.isSunk()
                     this.shipSunk += 1
                     this.shipAfloat -= 1
-                    this.board[row][col] = [ship.name, 3] // sunk ship
+                    this.__sinkAllShipCoords(ship.name)  // sunk ship
+                    
                 }
             }
         })
@@ -159,5 +160,20 @@ export class Gameboard {
     //         this.board[row][col] = 2
     //     }
     }
+
+    __sinkAllShipCoords(shipName) {
+
+        this.ships.forEach(ship => {
+            if (ship.name === shipName) {
+                ship.coords.forEach(coord => {
+                    const row = coord[0]
+                    const col = coord[1]
+                    // change all coords of ship to sunk
+                    this.board[row][col] = [ship.name, 3] // sunk ship
+                })
+            }
+        })
+    }
+
 }
 
