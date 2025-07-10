@@ -3,7 +3,8 @@ export function testFn(num) {
 }
 
 export class Ship {
-    constructor(length) {
+    constructor(name, length) {
+        this.name = name;
         this.length = length;
         this.coords = []
         this.hits = 0;
@@ -31,6 +32,8 @@ export class Gameboard {
         this.board = [];
         this.shipCount = 0
         this.ships = []
+        this.shipAfloat = 0;
+        this.shipSunk = 0;
     }
 
     createBoard(size, shipCount) {
@@ -42,7 +45,7 @@ export class Gameboard {
     //creates new ship at coordinates based on direction (vertical/horizontal)
     //coordinate provided should be the "front" of the ship
     //Do we notate specific ships placed in the gameboard?
-    placeShip(row, col, length, dir) {
+    placeShip(row, col, name, length, dir) {
         
         const validV = this.__validateVertPlacement(row, col, length)
         const validH = this.__validateHorPlacement(row, col, length)
@@ -53,25 +56,36 @@ export class Gameboard {
         
         }
         
-        const ship = new Ship(length)
+        const ship = new Ship(name, length)
         
         
-        this.board[row][col] = 1 // consolidate this step into loop like validator methods
+        this.board[row][col] = [ship.name, 1] // consolidate this step into loop like validator methods
         
         
-        ship.coords.push([row, col])
-
+        
         //going to need to add edge limits for ship length, board edges, 
         // and already placed ships
         if (dir === "h") {
+            ship.coords.push([row, col])
+            
             for (let x = col; x < col + length - 1; x++) {
-                this.board[row][x + 1] = 1
+                this.board[row][x + 1] = [ship.name, 1]
+                ship.coords.push([row, x + 1])
             }
+            
+            this.shipAfloat += 1
+
         } else if (dir === "v") {
+            ship.coords.push([row, col])
+            
             for (let x = row; x < row + length - 1; x++) {
-                this.board[x + 1][col] = 1
+                this.board[x + 1][col] = [ship.name, 1]
+                ship.coords.push([x + 1, col])
             }
+            this.shipAfloat += 1
         }
+
+        this.ships.push(ship) 
     }
 
     __validateHorPlacement(row, col, length) {
@@ -122,14 +136,28 @@ export class Gameboard {
     receiveAttack(row, col) {
         const atk = this.board[row][col]
 
-        // missed attack
         if (atk === 0) {
             this.board[row][col] = 4
-        }
 
-        if (atk === 1) {
-            this.board[row][col] = 2
         }
+        
+        this.ships.forEach(ship => {
+            if (ship.coords.some(coord => coord[0] === row && coord[1] === col)) {
+                ship.hit()
+                this.board[row][col] = [ship.name, 2] // hit ship
+                if (ship.hits === ship.length) {
+                    ship.isSunk()
+                    this.shipSunk += 1
+                    this.shipAfloat -= 1
+                    this.board[row][col] = [ship.name, 3] // sunk ship
+                }
+            }
+        })
+        
+
+    //     if (atk === 1) {
+    //         this.board[row][col] = 2
+    //     }
     }
 }
 

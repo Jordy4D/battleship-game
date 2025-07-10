@@ -11,9 +11,10 @@ test('test function', () => {
 })
 
 test('checks Ship methods', () => {
-    const newShip = new Ship(3)
+    const newShip = new Ship("santaMaria", 3)
 
     expect(newShip.length).toBe(3)
+    expect(newShip.name).toBe("santaMaria")
     expect(newShip.hits).toBe(0)
     expect(newShip.sunk).toBe(false)
 
@@ -45,54 +46,79 @@ test('checks gameboard class methods', () => {
     expect(testBoard.__validateVertPlacement(1, 2, 3)).toBe(true)
 
     
-    testBoard.placeShip(1, 2, 3, "h")              
+    testBoard.placeShip(1, 2, "santaMaria", 3, "h")      
     
+    expect(testBoard.shipAfloat).toBe(1)
+    expect(testBoard.ships.length).toBe(1)
+    expect(testBoard.ships[0].length).toBe(3)
+    expect(testBoard.ships[0].name).toBe("santaMaria")
+    expect(testBoard.ships[0].coords).toEqual([[1, 2], [1, 3], [1, 4]])
+    expect(testBoard.ships[0]).toEqual(expect.objectContaining({
+                                    name: "santaMaria",
+                                    length: 3,
+                                    coords: [[1, 2], [1, 3], [1, 4]],
+                                    hits: 0,
+                                    sunk: false
+                                }))
+    expect(testBoard.ships[0].sunk).toBe(false)
+
     expect(testBoard.board).toEqual(expect.arrayContaining([
                                     [ 0, 0, 0, 0, 0, ],
-                                    [ 0, 0, 1, 1, 1, ],
+                                    [ 0, 0, ["santaMaria", 1], ["santaMaria", 1], ["santaMaria", 1], ],
                                     [ 0, 0, 0, 0, 0, ],
                                     [ 0, 0, 0, 0, 0, ],
                                     [ 0, 0, 0, 0, 0, ]
                                 ]));
 
-    testBoard.placeShip(0, 1, 4, "v")              
+    testBoard.placeShip(0, 1, "destroyer", 4, "v")
 
 
     expect(testBoard.board).toEqual(expect.arrayContaining([
-                                    [ 0, 1, 0, 0, 0, ],
-                                    [ 0, 1, 1, 1, 1, ],
-                                    [ 0, 1, 0, 0, 0, ],
-                                    [ 0, 1, 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], ["santaMaria", 1], ["santaMaria", 1], ["santaMaria", 1], ],
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
                                     [ 0, 0, 0, 0, 0, ]
                                 ]));
 
-    testBoard.placeShip(0, 2, 3, "h")              
+    testBoard.placeShip(0, 2, "submarine", 3, "h")
 
 
     expect(testBoard.board).toEqual(expect.arrayContaining([
-                                    [ 0, 1, 0, 0, 0, ],
-                                    [ 0, 1, 1, 1, 1, ],
-                                    [ 0, 1, 0, 0, 0, ],
-                                    [ 0, 1, 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], ["santaMaria", 1], ["santaMaria", 1], ["santaMaria", 1], ],
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
                                     [ 0, 0, 0, 0, 0, ]
                                 ]));
 
-    testBoard.placeShip(2, 0, 3, "v")              
+    testBoard.placeShip(2, 0, "battleship", 3, "v")
 
 
     expect(testBoard.board).toEqual(expect.arrayContaining([
-                                    [ 0, 1, 0, 0, 0, ],
-                                    [ 0, 1, 1, 1, 1, ],
-                                    [ 0, 1, 0, 0, 0, ],
-                                    [ 0, 1, 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], ["santaMaria", 1], ["santaMaria", 1], ["santaMaria", 1], ],
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
                                     [ 0, 0, 0, 0, 0, ]
-                                ]));                            
+                                ]));                           
 
     testBoard.receiveAttack(1, 2)
     testBoard.receiveAttack(2, 0)
 
-    expect(testBoard.board[1][2]).toBe(2) // 2 = hit ship
+    expect(testBoard.board[1][2]).toEqual(expect.arrayContaining(["santaMaria", 2])) // 2 = hit ship
     expect(testBoard.board[2][0]).toBe(4) // 2 = hit ship
+
+    expect(testBoard.board).toEqual(expect.arrayContaining([
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], ["santaMaria", 2], ["santaMaria", 1], ["santaMaria", 1], ],
+                                    [ 4, ["destroyer", 1], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 1], 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ]
+                                ]));   
+
+    
+
 
     // testBoard.hit()
     // expect(testBoard.).toBe(1)
