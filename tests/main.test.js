@@ -70,6 +70,51 @@ test('checks gameboard class methods', () => {
                                     [ 0, 0, 0, 0, 0, ]
                                 ]));
 
+    
+})
+
+
+test('checks gameboard attacking function', () => {
+
+    const testBoard = new Gameboard()
+    testBoard.createBoard(5, 3)
+
+    expect(testBoard.board).toEqual(expect.arrayContaining([
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ]
+                                ]));
+    
+    expect(testBoard.__validateHorPlacement(1, 2, 3)).toBe(true)
+    expect(testBoard.__validateVertPlacement(1, 2, 3)).toBe(true)
+
+    
+    testBoard.placeShip(1, 2, "santaMaria", 3, "h")      
+    
+    expect(testBoard.shipAfloat).toBe(1)
+    expect(testBoard.ships.length).toBe(1)
+    expect(testBoard.ships[0].length).toBe(3)
+    expect(testBoard.ships[0].name).toBe("santaMaria")
+    expect(testBoard.ships[0].coords).toEqual([[1, 2], [1, 3], [1, 4]])
+    expect(testBoard.ships[0]).toEqual(expect.objectContaining({
+                                    name: "santaMaria",
+                                    length: 3,
+                                    coords: [[1, 2], [1, 3], [1, 4]],
+                                    hits: 0,
+                                    sunk: false
+                                }))
+    expect(testBoard.ships[0].sunk).toBe(false)
+
+    expect(testBoard.board).toEqual(expect.arrayContaining([
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, ["santaMaria", 1], ["santaMaria", 1], ["santaMaria", 1], ],
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ]
+                                ]));
+
     testBoard.placeShip(0, 1, "destroyer", 4, "v")
 
 
@@ -149,15 +194,21 @@ test('checks gameboard class methods', () => {
                                     [ 0, 0, 0, 0, 0, ]
                                 ]));
 
-    // testBoard.hit()
-    // expect(testBoard.).toBe(1)
-    // testBoard.hit()
-    // expect(testBoard.).toBe(2)
-    // testBoard.hit()
-    // expect(testBoard.).toBe(3)
-    
-    // testBoard.isSunk()
-    // expect(testBoard.).toBe(true)
+
+    testBoard.receiveAttack(1, 3) //santaMaria hit
+    testBoard.receiveAttack(1, 4) //santaMaria hit
+
+    expect(testBoard.board).toEqual(expect.arrayContaining([
+                                    [ 0, ["destroyer", 3], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 3], ["santaMaria", 3], ["santaMaria", 3], ["santaMaria", 3], ],
+                                    [ 4, ["destroyer", 3], 0, 0, 0, ],
+                                    [ 0, ["destroyer", 3], 0, 0, 0, ],
+                                    [ 0, 0, 0, 0, 0, ]
+                                ]));
+
+    expect(testBoard.shipAfloat).toBe(0)
+    expect(testBoard.shipSunk).toBe(2)
+
+        
+
 })
-
-

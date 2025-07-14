@@ -162,7 +162,9 @@ export class Gameboard {
     }
 
     __sinkAllShipCoords(shipName) {
-
+        if (this.shipSunk === this.shipCount) {
+            return "All ships sunk!"
+        }
         this.ships.forEach(ship => {
             if (ship.name === shipName) {
                 ship.coords.forEach(coord => {
@@ -172,8 +174,25 @@ export class Gameboard {
                     this.board[row][col] = [ship.name, 3] // sunk ship
                 })
             }
+
+            
         })
+        
     }
 
 }
 
+export class Player {
+    constructor(name) {
+        this.name = name;
+        this.gameboard = new Gameboard();
+    }
+
+    placeShip(row, col, name, length, dir) {
+        this.gameboard.placeShip(row, col, name, length, dir);
+    }
+
+    receiveAttack(row, col) {
+        this.gameboard.receiveAttack(row, col);
+    }
+}
