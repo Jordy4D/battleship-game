@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship Game</title>
     <script src="main.js"></script>
+    <script src="gameplay.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="main-container">
         <div class="header-container">
             <h1>Battleship Game</h1>
+            <h3>Player: <span id="player-name"></span></h3>
         </div>
         <div class="board-container">
             <div class="board">
@@ -22,8 +24,8 @@
             <button id="reset-game">Reset Game</button>
             <button id="new-ship">New Ship</button>
             <div class="status">
-                <p id="ships-sunk">Ships Sunk: </p>
-                <p id="ships-afloat">Ships Remaining: </p>
+                <p id="ships-sunk">Ships Sunk: <span id="ships-sunk"></span></p>
+                <p id="ships-afloat">Ships Remaining: <span id="ships-afloat"></span></p>
 
     </div>
 </body>

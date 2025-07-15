@@ -5,7 +5,7 @@ body {
     background-color: darkgray;
 }
 
-h1 {
+.header-container {
     text-align: center;
     color: #333;
 }
