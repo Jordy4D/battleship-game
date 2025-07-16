@@ -1,4 +1,4 @@
-import { testFn, Ship, Gameboard } from "../src/main.js"
+import { testFn, Ship, Gameboard } from "../src/classes.js"
 
 
 test('adds 1 + 2 to equal 3', () => {
