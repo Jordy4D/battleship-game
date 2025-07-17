@@ -1,7 +1,11 @@
-// import { testFn, Ship, Gameboard } from "../src/main.js"
+import { Ship, Gameboard } from "./classes.js"
 
 
-console.log("gameplay.js loaded");
+
+
+function logicTest() {
+    console.log("logic.js loaded");
+}
 
 // export function startGame() {
 //     const playerName = prompt("Enter your name:");
@@ -19,3 +23,5 @@ console.log("gameplay.js loaded");
     
 //     console.log("Game started for", playerName);
 // }
+
+export { logicTest };

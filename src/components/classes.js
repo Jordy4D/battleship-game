@@ -1,8 +1,9 @@
-export function testFn(num) {
-    return num
+function testFn(num) {
+    console.log(num)
+    return num;
 }
 
-export class Ship {
+class Ship {
     constructor(name, length) {
         this.name = name;
         this.length = length;
@@ -27,7 +28,7 @@ export class Ship {
 
 }
 
-export class Gameboard {
+class Gameboard {
     constructor() {
         this.board = [];
         this.shipCount = 0
@@ -182,7 +183,7 @@ export class Gameboard {
 
 }
 
-export class Player {
+class Player {
     constructor(name) {
         this.name = name;
         this.gameboard = new Gameboard();
@@ -196,3 +197,5 @@ export class Player {
         this.gameboard.receiveAttack(row, col);
     }
 }
+
+export { Player, Ship, Gameboard, testFn };
