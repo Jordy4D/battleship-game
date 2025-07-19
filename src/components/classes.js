@@ -33,13 +33,19 @@ class Gameboard {
         this.board = [];
         this.shipCount = 0
         this.ships = []
-        this.shipAfloat = 0;
-        this.shipSunk = 0;
+        this.shipsRemaining = 0;
+        this.shipsSunk = 0;
     }
 
     createBoard(size, shipCount) {
-        this.board = Array(size).fill(null).map(() => Array(size).fill(0));
+        this.board = Array(size).fill(null).map(() => Array(size).fill(null));
 
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                this.board[i][j] = {status: 0, coord: [i, j]}; // 0 = empty space
+            }
+        }
+        console.log(this.board)
         this.shipCount = shipCount
     }
 
@@ -74,7 +80,7 @@ class Gameboard {
                 ship.coords.push([row, x + 1])
             }
             
-            this.shipAfloat += 1
+            this.shipsRemaining += 1
 
         } else if (dir === "v") {
             ship.coords.push([row, col])
@@ -83,7 +89,7 @@ class Gameboard {
                 this.board[x + 1][col] = [ship.name, 1]
                 ship.coords.push([x + 1, col])
             }
-            this.shipAfloat += 1
+            this.shipsRemaining += 1
         }
 
         this.ships.push(ship) 
@@ -148,8 +154,8 @@ class Gameboard {
                 this.board[row][col] = [ship.name, 2] // hit ship
                 if (ship.hits === ship.length) {
                     ship.isSunk()
-                    this.shipSunk += 1
-                    this.shipAfloat -= 1
+                    this.shipsSunk += 1
+                    this.shipsRemaining -= 1
                     this.__sinkAllShipCoords(ship.name)  // sunk ship
                     
                 }
@@ -163,7 +169,7 @@ class Gameboard {
     }
 
     __sinkAllShipCoords(shipName) {
-        if (this.shipSunk === this.shipCount) {
+        if (this.shipsSunk === this.shipCount) {
             return "All ships sunk!"
         }
         this.ships.forEach(ship => {
