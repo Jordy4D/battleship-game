@@ -42,7 +42,7 @@ class Gameboard {
 
         for (let i = 0; i < size; i++) {
             for (let j = 0; j < size; j++) {
-                this.board[i][j] = {status: 0, coord: [i, j]}; // 0 = empty space
+                this.board[i][j] = {status: 0, coord: [i, j], ship: null, length: 0}; // 0 = empty space
             }
         }
         console.log(this.board)
@@ -54,29 +54,29 @@ class Gameboard {
     //Do we notate specific ships placed in the gameboard?
     placeShip(row, col, name, length, dir) {
         
-        const validV = this.__validateVertPlacement(row, col, length)
-        const validH = this.__validateHorPlacement(row, col, length)
+        // const validV = this.__validateVertPlacement(row, col, length)
+        // const validH = this.__validateHorPlacement(row, col, length)
         
-        if (validV === false || validH === false) {
-            return 
-        // alert('cannot place ship')
+        // if (validV === false || validH === false) {
+        //     return 
+        // // alert('cannot place ship')
         
-        }
+        // }
         
         const ship = new Ship(name, length)
-        
-        
-        this.board[row][col] = [ship.name, 1] // consolidate this step into loop like validator methods
-        
-        
-        
-        //going to need to add edge limits for ship length, board edges, 
+
+
+        this.board[row][col] = {status: 1, coord: [row, col], ship: ship.name, length: ship.length} // consolidate this step into loop like validator methods
+
+
+
+        //going to need to add edge limits for ship length, board edges,
         // and already placed ships
         if (dir === "h") {
             ship.coords.push([row, col])
             
             for (let x = col; x < col + length - 1; x++) {
-                this.board[row][x + 1] = [ship.name, 1]
+                this.board[row][x + 1] = {status: 1, coord: [row, x + 1], ship: ship.name, length: ship.length}
                 ship.coords.push([row, x + 1])
             }
             
@@ -86,7 +86,7 @@ class Gameboard {
             ship.coords.push([row, col])
             
             for (let x = row; x < row + length - 1; x++) {
-                this.board[x + 1][col] = [ship.name, 1]
+                this.board[x + 1][col] = {status: 1, coord: [x + 1, col], ship: ship.name, length: ship.length}
                 ship.coords.push([x + 1, col])
             }
             this.shipsRemaining += 1
@@ -103,12 +103,11 @@ class Gameboard {
         for (let x = row; x < row + length; x++) {
             
             // make sure to return which coordinate is occupied in testing
-            if (this.board[x][col] !== 0) {
+            if (this.board[x][col].status !== 0) {
                 return false
-            } 
-            
-            
-            
+            }
+
+
             }
         
         return true
@@ -126,7 +125,7 @@ class Gameboard {
         for (let x = col; x < col + length; x++) {
             
             
-            if (this.board[row][x] !== 0) {
+            if (this.board[row][x].status !== 0) {
                 return false
             }
 
@@ -141,17 +140,17 @@ class Gameboard {
 
     // 0 = empty space; 1 = ship; 2 = hit ship; 3 = sunken ship; 4 = missed attack
     receiveAttack(row, col) {
-        const atk = this.board[row][col]
+        const atk = this.board[row][col].status
 
         if (atk === 0) {
-            this.board[row][col] = 4
+            this.board[row][col].status = 4
 
         }
         
         this.ships.forEach(ship => {
             if (ship.coords.some(coord => coord[0] === row && coord[1] === col)) {
                 ship.hit()
-                this.board[row][col] = [ship.name, 2] // hit ship
+                this.board[row][col] = {status: 2, coord: [row, col], ship: ship.name, length: ship.length} // hit ship
                 if (ship.hits === ship.length) {
                     ship.isSunk()
                     this.shipsSunk += 1
@@ -178,7 +177,7 @@ class Gameboard {
                     const row = coord[0]
                     const col = coord[1]
                     // change all coords of ship to sunk
-                    this.board[row][col] = [ship.name, 3] // sunk ship
+                    this.board[row][col] = {status: 3, coord: [row, col], ship: ship.name, length: ship.length} // sunk ship
                 })
             }
 
