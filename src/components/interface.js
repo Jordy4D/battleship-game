@@ -30,6 +30,8 @@ function gameInit() {
     gameboard.placeShip(0, 0, "Carrier", 5, "h");
     gameboard.placeShip(5, 5, "Battleship", 4, "v");
     gameboard.placeShip(2, 2, "Patrol Boat", 2, "h");
+    gameboard.placeShip(2, 7, "Submarine", 3, "h");
+    gameboard.placeShip(7, 1, "Cruiser", 3, "v");
 
     // gameboardUI.innerHTML = generateBoardHTML(gameboard.board.length, gameboard.board[0].length);
     
