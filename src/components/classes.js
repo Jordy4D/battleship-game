@@ -4,12 +4,13 @@ function testFn(num) {
 }
 
 class Ship {
-    constructor(name, length) {
+    constructor(name, length, dir) {
         this.name = name;
         this.length = length;
         this.coords = []
         this.hits = 0;
         this.sunk = false;
+        this.dir = dir
     }
 
     hit() {
@@ -63,7 +64,7 @@ class Gameboard {
         
         // }
         
-        const ship = new Ship(name, length)
+        const ship = new Ship(name, length, dir)
 
 
         this.board[row][col] = {status: 1, coord: [row, col], ship: ship.name, length: ship.length} // consolidate this step into loop like validator methods
@@ -78,10 +79,11 @@ class Gameboard {
             for (let x = col; x < col + length - 1; x++) {
                 this.board[row][x + 1] = {status: 1, coord: [row, x + 1], ship: ship.name, length: ship.length}
                 ship.coords.push([row, x + 1])
+                // this.board[row + 1][x + 1] = {status: 5, coord: [row + 1, x + 1], ship: null, length: 0} // near ship
+                // this.board[row - 1][x + 1] = {status: 5, coord: [row - 1, x + 1], ship: null, length: 0} // near ship
             }
-            
             this.shipsRemaining += 1
-
+            
         } else if (dir === "v") {
             ship.coords.push([row, col])
             
@@ -91,8 +93,9 @@ class Gameboard {
             }
             this.shipsRemaining += 1
         }
-
+        
         this.ships.push(ship) 
+        this.__shipProximity(ship.name) // update status of squares around any ship on board to 5 so users can see if their attacks are close
     }
 
     __validateHorPlacement(row, col, length) {
@@ -138,7 +141,84 @@ class Gameboard {
 
     }
 
-    // 0 = empty space; 1 = ship; 2 = hit ship; 3 = sunken ship; 4 = missed attack
+    __shipProximity(shipName) {
+        // update status of squares around any ship on board to 5 so users can see if their attacks are close
+        this.ships.forEach(ship => {
+            
+            // vertical ship
+            if (ship.name === shipName && ship.dir === "v") {
+                ship.coords.forEach(coord => {
+                    const row = coord[0]
+                    const col = coord[1]
+                    // update surrounding squares
+
+                    if (col > 0 ) { 
+                        if (this.board[row - 1][col - 1]) { // left of ship
+                            this.board[row - 1][col - 1] = {status: 5, coord: [row - 1, col - 1], ship: null, length: 0} 
+                        }
+                        if (this.board[row][col - 1] ) { // above ship
+                            this.board[row][col - 1] = {status: 5, coord: [row, col - 1], ship: null, length: 0} 
+                        }
+                        if (this.board[row - 1][col + 1] ) { // right of ship
+                            this.board[row - 1][col + 1] = {status: 5, coord: [row - 1, col + 1], ship: null, length: 0} 
+                        }
+                    }
+                    if (row > 0 && this.board[row - 1][col].status !== 1) { // above ship
+                        this.board[row - 1][col] = {status: 5, coord: [row - 1, col], ship: null, length: 0} 
+                    }
+                    if (row < this.board.length - 1 && this.board[row + 1][col].status !== 1) { // end of ship
+                        this.board[row + 1][col] = {status: 5, coord: [row + 1, col], ship: null, length: 0} 
+                        this.board[row + 1][col - 1] = {status: 5, coord: [row + 1, col], ship: null, length: 0} 
+
+                    }
+                    if (col < this.board.length - 1 ) { // right of ship
+                        this.board[row - 1][col + 1] = {status: 5, coord: [row - 1, col + 1], ship: null, length: 0} 
+                        this.board[row][col + 1] = {status: 5, coord: [row, col + 1], ship: null, length: 0} 
+                        this.board[row + 1][col + 1] = {status: 5, coord: [row + 1, col + 1], ship: null, length: 0} 
+                    }
+                    
+                    })
+                }
+
+            // horizontal ship
+            if (ship.name === shipName && ship.dir === "h") {
+                ship.coords.forEach(coord => {
+                    const row = coord[0]
+                    const col = coord[1]
+                    // update surrounding squares
+
+                    if (row > 0) {
+                        if (this.board[row - 1][col - 1]) {
+                            this.board[row - 1][col - 1] = {status: 5, coord: [row - 1, col - 1], ship: null, length: 0} 
+                        }
+                        if (this.board[row - 1][col]) {
+                            this.board[row - 1][col] = {status: 5, coord: [row - 1, col], ship: null, length: 0} 
+                        }
+                        if (this.board[row - 1][col + 1]) {
+                            this.board[row - 1][col + 1] = {status: 5, coord: [row - 1, col + 1], ship: null, length: 0} 
+                        }
+                    }
+                    if (col > 0 && this.board[row][col - 1].status !== 1) {
+                        this.board[row][col - 1] = {status: 5, coord: [row, col - 1], ship: null, length: 0} 
+                    }
+                    if (col < this.board[row].length - 1 && this.board[row][col + 1].status !== 1) {
+                        this.board[row][col + 1] = {status: 5, coord: [row, col + 1], ship: null, length: 0} 
+                    }
+                    if (row < this.board.length - 1) {
+                        this.board[row + 1][col - 1] = {status: 5, coord: [row + 1, col - 1], ship: null, length: 0} 
+                        this.board[row + 1][col] = {status: 5, coord: [row + 1, col], ship: null, length: 0} 
+                        this.board[row + 1][col + 1] = {status: 5, coord: [row + 1, col + 1], ship: null, length: 0} 
+                    }
+                    
+                    })
+                }
+            })
+        }
+
+
+
+
+    // 0 = empty space; 1 = ship; 2 = hit ship; 3 = sunken ship; 4 = missed attack; 5 = near ship
     receiveAttack(row, col) {
         const atk = this.board[row][col].status
 
@@ -148,6 +228,10 @@ class Gameboard {
         }
         
         this.ships.forEach(ship => {
+            if (ship.coords.some(coord => coord[0] === row && coord[1] === col && atk === 2)) {
+                return alert("Already hit this square!")
+            }
+            
             if (ship.coords.some(coord => coord[0] === row && coord[1] === col)) {
                 ship.hit()
                 this.board[row][col] = {status: 2, coord: [row, col], ship: ship.name, length: ship.length} // hit ship

@@ -28,6 +28,8 @@ function gameInit() {
     document.getElementById("ships-remaining-value").textContent = gameboard.shipsRemaining;
     document.getElementById("ships-sunk-value").textContent = gameboard.shipsSunk;
     gameboard.placeShip(0, 0, "Carrier", 5, "h");
+    gameboard.placeShip(5, 5, "Battleship", 4, "v");
+    gameboard.placeShip(2, 2, "Patrol Boat", 2, "h");
 
     // gameboardUI.innerHTML = generateBoardHTML(gameboard.board.length, gameboard.board[0].length);
     
@@ -52,7 +54,6 @@ function gameInit() {
 
     floatingShips();  
 
-
 }
 
 function addClickEventToSquares(div) {
@@ -74,6 +75,16 @@ function addClickEventToSquares(div) {
                     div.classList.remove("missed");
                     div.classList.remove("sunk");
                     div.classList.remove("ship");
+
+                    // Update the ship's coordinates in the UI
+                }
+                else if (gameboard.board[x][y].status === 5) {
+                    div.classList.add("near-ship");
+                    div.classList.remove("empty");
+                    div.classList.remove("missed");
+                    div.classList.remove("sunk");
+                    div.classList.remove("ship");
+                    
 
                     // Update the ship's coordinates in the UI
                 }
