@@ -235,7 +235,7 @@ class Gameboard {
 
 
 
-    // 0 = empty space; 1 = ship; 2 = hit ship; 3 = sunken ship; 4 = missed attack; 5 = near ship
+    // 0 = empty space; 1 = ship; 2 = hit ship; 3 = sunken ship; 4 = missed attack; 5 = missed attack, near ship
     receiveAttack(row, col) {
         const atk = this.board[row][col].status
 
@@ -246,8 +246,10 @@ class Gameboard {
         
         this.ships.forEach(ship => {
             if (ship.coords.some(coord => coord[0] === row && coord[1] === col && atk === 2)) {
-                return alert("Already hit this square!")
+                return console.log("Already hit this square!")
             }
+
+           
             
             if (ship.coords.some(coord => coord[0] === row && coord[1] === col)) {
                 ship.hit()
@@ -262,6 +264,7 @@ class Gameboard {
             }
         })
         
+        console.table(this.board.map(row => row.map(cell => cell.status))); // log the board status for debugging
 
     //     if (atk === 1) {
     //         this.board[row][col] = 2
@@ -269,9 +272,6 @@ class Gameboard {
     }
 
     __sinkAllShipCoords(shipName) {
-        if (this.shipsSunk === this.shipCount) {
-            return "All ships sunk!"
-        }
         this.ships.forEach(ship => {
             if (ship.name === shipName) {
                 ship.coords.forEach(coord => {
@@ -281,9 +281,12 @@ class Gameboard {
                     this.board[row][col] = {status: 3, coord: [row, col], ship: ship.name, length: ship.length} // sunk ship
                 })
             }
-
+            
             
         })
+        if (this.shipsSunk === this.shipCount) {
+            return alert("All ships sunk!")
+        }
         
     }
 

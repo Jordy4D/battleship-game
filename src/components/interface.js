@@ -10,8 +10,8 @@ const newDestroyerShip = document.getElementById("new-destroyer-ship");
 const newSubmarineShip = document.getElementById("new-submarine-ship");
 const newPatrolBoatShip = document.getElementById("new-patrol-boat");
 const gameboardUI = document.getElementById("game-board");
-const shipsSunkUI = document.getElementById("ships-sunk");
-const shipsRemainingUI = document.getElementById("ships-remaining");
+const shipsSunkUI = document.getElementById("ships-sunk-value");
+const shipsRemainingUI = document.getElementById("ships-remaining-value");
 const gameboardSquare = document.querySelectorAll(".boardSquare");
 
 
@@ -27,11 +27,11 @@ function gameInit() {
     
     document.getElementById("ships-remaining-value").textContent = gameboard.shipsRemaining;
     document.getElementById("ships-sunk-value").textContent = gameboard.shipsSunk;
-    gameboard.placeShip(0, 0, "Carrier", 5, "h");
-    gameboard.placeShip(5, 5, "Battleship", 4, "v");
-    gameboard.placeShip(2, 2, "Patrol Boat", 2, "h");
-    gameboard.placeShip(2, 7, "Submarine", 3, "h");
-    gameboard.placeShip(7, 1, "Cruiser", 3, "v");
+    // gameboard.placeShip(0, 0, "Carrier", 5, "h");
+    // gameboard.placeShip(5, 5, "Battleship", 4, "v");
+    // gameboard.placeShip(2, 2, "Patrol Boat", 2, "h");
+    // gameboard.placeShip(2, 7, "Submarine", 3, "h");
+    // gameboard.placeShip(7, 1, "Cruiser", 3, "v");
 
     // gameboardUI.innerHTML = generateBoardHTML(gameboard.board.length, gameboard.board[0].length);
     
@@ -55,66 +55,84 @@ function gameInit() {
     }
 
     floatingShips();  
+    updateScoreboard()
+}
 
+function updateScoreboard() {
+    shipsSunkUI.textContent = gameboard.shipsSunk;
+    shipsRemainingUI.textContent = gameboard.shipsRemaining;
 }
 
 function addClickEventToSquares(div) {
     div.addEventListener("click", () => {
         const [x, y] = div.dataset.coord.split(",").map(Number);
         console.log(`Attacking coordinates: (${x}, ${y})`);
+        
         gameboard.receiveAttack(x, y);
 
-                if (gameboard.board[x][y].status === 4) {
-                    div.classList.add("missed");
-                    div.classList.remove("empty");
-                    div.classList.remove("hit");
-                    div.classList.remove("sunk");
-                    div.classList.add("attacked");
-                }
-                else if (gameboard.board[x][y].status === 2) {
-                    div.classList.add("hit");
-                    div.classList.remove("empty");
-                    div.classList.remove("missed");
-                    div.classList.remove("sunk");
-                    div.classList.remove("ship");
+        if (gameboard.board[x][y].status === 4) {
+            div.classList.add("missed");
+            div.classList.remove("empty");
+            div.classList.remove("hit");
+            div.classList.remove("sunk");
+            div.classList.add("attacked");
+            
+        }
+        else if (gameboard.board[x][y].status === 2) {
+            div.classList.add("hit");
+            div.classList.remove("empty");
+            div.classList.remove("missed");
+            div.classList.remove("sunk");
+            div.classList.remove("ship");
 
-                    // Update the ship's coordinates in the UI
-                }
-                else if (gameboard.board[x][y].status === 5) {
-                    div.classList.add("near-ship");
-                    div.classList.remove("empty");
-                    div.classList.remove("missed");
-                    div.classList.remove("sunk");
-                    div.classList.remove("ship");
-                    
+            // Update the ship's coordinates in the UI
+        }
+        else if (gameboard.board[x][y].status === 5) {
+            div.classList.add("near-ship");
+            div.classList.remove("empty");
+            div.classList.remove("missed");
+            div.classList.remove("sunk");
+            div.classList.remove("ship");
+            
 
-                    // Update the ship's coordinates in the UI
-                }
-                else if (gameboard.board[x][y].status === 3) {
-                    div.classList.add("sunk");
-                    div.classList.remove("empty");
-                    div.classList.remove("missed");
-                    div.classList.remove("hit");
-                    div.classList.remove("ship");
-                    //needs to update all squares of the ship to sunk
-                    gameboard.ships.forEach(ship => {
-                        if (ship.name === gameboard.board[x][y].ship) {
-                            ship.coords.forEach(coord => {
-                                const sunkSquare = document.querySelector(`.boardSquare[data-coord="${coord}"]`);
-                                if (sunkSquare) {
-                                    sunkSquare.classList.add("sunk");
-                                }
-                            });
+            // Update the ship's coordinates in the UI
+        }
+        else if (gameboard.board[x][y].status === 3) {
+            div.classList.add("sunk");
+            div.classList.remove("empty");
+            div.classList.remove("missed");
+            div.classList.remove("hit");
+            div.classList.remove("ship");
+            //needs to update all squares of the ship to sunk
+            gameboard.ships.forEach(ship => {
+                if (ship.name === gameboard.board[x][y].ship) {
+                    ship.coords.forEach(coord => {
+                        const sunkSquare = document.querySelector(`.boardSquare[data-coord="${coord}"]`);
+                        if (sunkSquare) {
+                            sunkSquare.classList.add("sunk");
+                            updateScoreboard()
                         }
                     });
                 }
-                // div.classList.add("attacked");
-                // Finish updating the UI based on the attack result
-                console.log(gameboard.board[x][y].status);
-                console.log(gameboard.board);
-
             });
+        }
+        // div.classList.add("attacked");
+        // Finish updating the UI based on the attack result
+        console.log(gameboard.board[x][y].status);
+        console.log(gameboard.board);
+
+    });
+            // disableSquareClicks();
 };
+
+function disableSquareClicks() {
+    gameboardSquare.forEach(square => {
+        square.removeEventListener("click", () => {});
+        square.classList.add("disabled");
+    }
+    );
+}
+
 
 function floatingShips() {
     gameboard.ships.forEach(ship => {
@@ -152,6 +170,21 @@ resetGame.addEventListener("click", () => {
         return;
     }
 
+});
+
+newPatrolBoatShip.addEventListener("click", () => {
+    const row = parseInt(prompt("Enter the row (0-9) to place the Patrol Boat:"));
+    const col = parseInt(prompt("Enter the column (0-9) to place the Patrol Boat:"));
+    const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
+    if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
+        alert("Invalid input. Please try again.");
+        return;
+    }
+    gameboard.placeShip(row, col, "Patrol Boat", 2, orientation);
+    gameboardUI.innerHTML = ""; // Clear the game board UI
+    gameInit(); // Reinitialize the game board
+    floatingShips(); // Reapply floating ships
+    updateScoreboard(); // Update the scoreboard
 });
 
 function test() {
