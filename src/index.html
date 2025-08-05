@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship Game</title>
-    <script src="main.js"></script>
-    <script src="gameplay.js"></script>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="main-container">
@@ -15,7 +12,7 @@
             <h3>Player: <span id="player-name"></span></h3>
         </div>
         <div class="board-container">
-            <div class="board">
+            <div class="gameboard" id="gameboard">
                 <!-- Game board will be dynamically generated here -->
             </div>
         </div>
@@ -24,9 +21,14 @@
             <button id="reset-game">Reset Game</button>
             <button id="new-ship">New Ship</button>
             <div class="status">
-                <p id="ships-sunk">Ships Sunk: <span id="ships-sunk"></span></p>
-                <p id="ships-afloat">Ships Remaining: <span id="ships-afloat"></span></p>
+                <p id="ships-sunk">Ships Sunk: <span id="ships-sunk-value"></span></p>
+                <p id="ships-remaining">Ships Remaining: <span id="ships-remaining-value"></span></p>
 
+            </div>
+        </div>
     </div>
+    <script>
+  console.log("HTML is working!");
+</script>
 </body>
 </html>

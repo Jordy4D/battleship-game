@@ -1,4 +1,4 @@
-import { Ship, Gameboard } from "./classes.js";
+import { Ship, Gameboard, Player } from "./classes.js";
 
 const enterName = document.getElementById("enter-name");
 const resetGame = document.getElementById("reset-game");
@@ -9,13 +9,16 @@ const newCruiserShip = document.getElementById("new-cruiser-ship");
 const newDestroyerShip = document.getElementById("new-destroyer-ship");
 const newSubmarineShip = document.getElementById("new-submarine-ship");
 const newPatrolBoatShip = document.getElementById("new-patrol-boat");
-const gameboardUI = document.getElementById("game-board");
+const gameboardUI = document.getElementById("gameboard");
 const shipsSunkUI = document.getElementById("ships-sunk-value");
 const shipsRemainingUI = document.getElementById("ships-remaining-value");
 const gameboardSquare = document.querySelectorAll(".boardSquare");
 
 
 const namePlayerOne = "One";
+
+const playerOne = new Player(namePlayerOne);
+// const playerTwo = new Player("Two");
 
 const gameboard = new Gameboard();
 // const testShip = new Ship("Destroyer", 4, [[0, 1], [0, 2], [0, 3], [0, 4]]);
@@ -147,52 +150,51 @@ function floatingShips() {
 floatingShips();    
                             
 
-enterName.addEventListener("click", () => {
-    const playerName = prompt("Enter your name:");
-    if (!playerName) {
-        prompt("Please enter a valid name.");
-        return;
-    } else {
-        document.getElementById("player-name").textContent = playerName;
-    }
+// enterName.addEventListener("click", () => {
+//     const playerName = prompt("Enter your name:");
+//     if (!playerName) {
+//         prompt("Please enter a valid name.");
+//         return;
+//     } else {
+//         document.getElementById("player-name").textContent = playerName;
+//     }
 
 
     
-});
+// });
 
-resetGame.addEventListener("click", () => {
-    let userConfirmation = confirm("Are you sure you want to reset the game?");
-    if (userConfirmation) {
-        gameboardUI.innerHTML = ""; // Clear the game board UI
-        playerNameUI.textContent = namePlayerOne; // Reset player name
-        gameInit();
-    } else {
-        return;
-    }
+// resetGame.addEventListener("click", () => {
+//     let userConfirmation = confirm("Are you sure you want to reset the game?");
+//     if (userConfirmation) {
+//         gameboardUI.innerHTML = ""; // Clear the game board UI
+//         playerNameUI.textContent = namePlayerOne; // Reset player name
+//         gameInit();
+//     } else {
+//         return;
+//     }
 
-});
+// });
 
-newPatrolBoatShip.addEventListener("click", () => {
-    const row = parseInt(prompt("Enter the row (0-9) to place the Patrol Boat:"));
-    const col = parseInt(prompt("Enter the column (0-9) to place the Patrol Boat:"));
-    const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
-    if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
-        alert("Invalid input. Please try again.");
-        return;
-    }
-    gameboard.placeShip(row, col, "Patrol Boat", 2, orientation);
-    gameboardUI.innerHTML = ""; // Clear the game board UI
-    gameInit(); // Reinitialize the game board
-    floatingShips(); // Reapply floating ships
-    updateScoreboard(); // Update the scoreboard
-});
+// newPatrolBoatShip.addEventListener("click", () => {
+//     const row = parseInt(prompt("Enter the row (0-9) to place the Patrol Boat:"));
+//     const col = parseInt(prompt("Enter the column (0-9) to place the Patrol Boat:"));
+//     const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
+//     if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
+//         alert("Invalid input. Please try again.");
+//         return;
+//     }
+//     gameboard.placeShip(row, col, "Patrol Boat", 2, orientation);
+//     gameboardUI.innerHTML = ""; // Clear the game board UI
+//     gameInit(); // Reinitialize the game board
+//     floatingShips(); // Reapply floating ships
+//     updateScoreboard(); // Update the scoreboard
+// });
 
 function test() {
     console.log('This is a test function in interface.js'); 
 }
 
-gameInit();
 
 
 
-export { test };
+export { test, gameInit };
