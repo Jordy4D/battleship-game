@@ -305,6 +305,10 @@ class Player {
     receiveAttack(row, col) {
         this.gameboard.receiveAttack(row, col);
     }
+
+    rename(newName) {
+        this.name = newName;
+    }
 }
 
 export { Player, Ship, Gameboard, testFn };

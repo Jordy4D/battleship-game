@@ -10,6 +10,18 @@ body {
     color: #333;
 }
 
+#game-title {
+    text-align: center;
+    font-size: 2.5em;
+    margin-top: 20px;
+}
+
+.board-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+}
+
 .gameboard {
     display: grid;
     grid-template-columns: repeat(10, 50px);
@@ -36,4 +48,24 @@ body {
     font-size: 24px;
     cursor: pointer;
     border: 1px solid #000;
+}
+
+.game-status {
+    text-align: center;
+    font-size: 1.5em;
+    margin-top: 20px;
+}
+
+.missed {
+    background-color: white;
+}
+.hit {
+    background-color: red;
+}
+.sunk {
+    background-color: black;
+}
+
+.ship {
+    background-color: blue;
 }

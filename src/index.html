@@ -7,24 +7,39 @@
 </head>
 <body>
     <div class="main-container">
-        <div class="header-container">
+        <div id="game-title">
             <h1>Battleship Game</h1>
-            <h3>Player: <span id="player-name"></span></h3>
         </div>
         <div class="board-container">
-            <div class="gameboard" id="gameboard">
-                <!-- Game board will be dynamically generated here -->
+            <div id="player-one-board">
+                <div class="header-container">
+                    <h3>Player 1: <span id="player-one-name"></span></h3>
+                </div>
+                <div class="gameboard" id="gameboard-one">
+                    <!-- Game board will be dynamically generated here -->
+                </div>
+                <div class="game-status">
+                    <p id="player-one-ships-sunk">Ships Sunk: <span id="player-one-ships-sunk-value"></span></p>
+                    <p id="player-one-ships-remaining">Ships Remaining: <span id="player-one-ships-remaining-value"></span></p>
+                </div>
+            </div>
+            <div id="player-two-board">
+                <div class="header-container">
+                    <h3>Player 2: <span id="player-two-name"></span></h3>
+                </div>
+                <div class="gameboard" id="gameboard-two">
+                    <!-- Game board will be dynamically generated here -->
+                </div>
+                <div class="game-status">
+                    <p id="player-two-ships-sunk">Ships Sunk: <span id="player-two-ships-sunk-value"></span></p>
+                    <p id="player-two-ships-remaining">Ships Remaining: <span id="player-two-ships-remaining-value"></span></p>
+                </div>
             </div>
         </div>
         <div class="controls-container">
             <button id="start-game">Start Game</button>
             <button id="reset-game">Reset Game</button>
             <button id="new-ship">New Ship</button>
-            <div class="status">
-                <p id="ships-sunk">Ships Sunk: <span id="ships-sunk-value"></span></p>
-                <p id="ships-remaining">Ships Remaining: <span id="ships-remaining-value"></span></p>
-
-            </div>
         </div>
     </div>
     <script>
