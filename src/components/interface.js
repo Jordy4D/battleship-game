@@ -25,7 +25,7 @@ const namePlayerTwo = "Two";
 const playerOne = new Player(namePlayerOne);
 const playerTwo = new Player(namePlayerTwo);
 
-const gameboard = new Gameboard();
+// const gameboard = new Gameboard();
 // const testShip = new Ship("Destroyer", 4, [[0, 1], [0, 2], [0, 3], [0, 4]]);
 // gameboard.placeShip(0, 1, "Destroyer", 4, "h");
 
@@ -39,41 +39,70 @@ function gameInit() {
     playerOneShipsSunkUI.textContent = playerOne.gameboard.shipsSunk;
     playerTwoShipsRemainingUI.textContent = playerTwo.gameboard.shipsRemaining;
     playerTwoShipsSunkUI.textContent = playerTwo.gameboard.shipsSunk;
+    
+    
+    
+    
     playerOne.gameboard.placeShip(0, 0, "Carrier", 5, "h");
     playerOne.gameboard.placeShip(5, 5, "Battleship", 4, "v");
     playerOne.gameboard.placeShip(2, 2, "Patrol Boat", 2, "h");
     playerOne.gameboard.placeShip(2, 7, "Submarine", 3, "h");
     playerOne.gameboard.placeShip(7, 1, "Cruiser", 3, "v");
-
-    generateBoardHTML(playerOne.gameboard.board, playerOneGameboardUI);
-    generateBoardHTML(playerTwo.gameboard.board, playerTwoGameboardUI);
+    
+    playerTwo.gameboard.placeShip(5, 6, "Battleship", 4, "v");
+    playerTwo.gameboard.placeShip(0, 3, "Carrier", 5, "h");
+    playerTwo.gameboard.placeShip(1, 2, "Patrol Boat", 2, "h");
+    playerTwo.gameboard.placeShip(3, 2, "Submarine", 3, "h");
+    playerTwo.gameboard.placeShip(6, 1, "Cruiser", 3, "v");
+    
     // gameboardUI.innerHTML = generateBoardHTML(gameboard.board.length, gameboard.board[0].length);
+    generatePlayerOneBoardHTML(playerOne, playerOneGameboardUI);
+    generatePlayerTwoBoardHTML(playerTwo, playerTwoGameboardUI);
 
 
     playerOneNameUI.textContent = namePlayerOne; // Set initial player name
     playerTwoNameUI.textContent = namePlayerTwo; // Set initial player name
 
-    floatingShips(playerOne);
-    floatingShips(playerTwo);
+    floatingShips(playerOne, 1);
+    floatingShips(playerTwo, 2);
 
     updateScoreboard(playerOne.gameboard, playerOneShipsSunkUI, playerOneShipsRemainingUI);
     updateScoreboard(playerTwo.gameboard, playerTwoShipsSunkUI, playerTwoShipsRemainingUI);
 }
 
-function generateBoardHTML(playerBoard, playerUI) {
+function generatePlayerOneBoardHTML(player, playerUI) {
 
-    for (let i = 0; i < playerBoard.length; i++) {
-        for (let j = 0; j < playerBoard[i].length; j++) {
+    for (let i = 0; i < player.gameboard.board.length; i++) {
+        for (let j = 0; j < player.gameboard.board[i].length; j++) {
             // Create a new div for each square in the gameboard
             // Add classes and attributes as needed
             const squareDiv = document.createElement("div");
-            squareDiv.classList.add("boardSquare");
-            squareDiv.classList.add("empty");        
-            squareDiv.innerHTML = playerBoard[i][j].status;
-            squareDiv.dataset.coord = playerBoard[i][j].coord; // Store coordinates for later use
-            squareDiv.dataset.ship = `empty`;
+            squareDiv.classList.add("boardSquare-one");
+            squareDiv.classList.add("empty-one");
+            squareDiv.innerHTML = player.gameboard.board[i][j].status;
+            squareDiv.dataset.coord = player.gameboard.board[i][j].coord; // Store coordinates for later use
+            squareDiv.dataset.ship = `${player.gameboard.board[i][j].ship || 'empty-one'}`;
 
-            addClickEventToSquares(squareDiv, playerBoard);
+            addClickEventToSquares(squareDiv, player, 1);
+            playerUI.appendChild(squareDiv);
+        }
+    }
+}
+
+function generatePlayerTwoBoardHTML(player, playerUI) {
+
+    for (let i = 0; i < player.gameboard.board.length; i++) {
+        for (let j = 0; j < player.gameboard.board[i].length; j++) {
+            // Create a new div for each square in the gameboard
+            // Add classes and attributes as needed
+            const squareDiv = document.createElement("div");
+            squareDiv.classList.add("boardSquare-two");
+            squareDiv.classList.add("empty-two");
+            squareDiv.innerHTML = player.gameboard.board[i][j].status;
+            squareDiv.dataset.coord = player.gameboard.board[i][j].coord; // Store coordinates for later use
+            squareDiv.dataset.ship = `${player.gameboard.board[i][j].ship || 'empty-two'}`;
+
+            addClickEventToSquares(squareDiv, player, 2);
             playerUI.appendChild(squareDiv);
         }
     }
@@ -86,66 +115,88 @@ function updateScoreboard(playerBoard, playerShipsSunk, playerShipsRemaining) {
     playerShipsRemaining.textContent = playerBoard.shipsRemaining;
 }
 
-function addClickEventToSquares(div, playerBoard) {
+function addClickEventToSquares(div, player, playerNumber) {
     div.addEventListener("click", () => {
         const [x, y] = div.dataset.coord.split(",").map(Number);
         console.log(`Attacking coordinates: (${x}, ${y})`);
 
-        playerBoard.receiveAttack(x, y);
+        player.receiveAttack(x, y);
 
-        if (playerBoard.board[x][y].status === 4) {
-            div.classList.add("missed");
-            div.classList.remove("empty");
-            div.classList.remove("hit");
-            div.classList.remove("sunk");
+        if (player.gameboard.board[x][y].status === 4) {
+            div.classList.add("missed-one");
+            div.classList.remove("empty-one");
+            div.classList.remove("hit-one");
+            div.classList.remove("sunk-one");
             div.classList.add("attacked");
             
         }
-        else if (playerBoard.board[x][y].status === 2) {
-            div.classList.add("hit");
-            div.classList.remove("empty");
-            div.classList.remove("missed");
-            div.classList.remove("sunk");
+        else if (player.gameboard.board[x][y].status === 2) {
+            div.classList.add("hit-one");
+            div.classList.remove("empty-one");
+            div.classList.remove("missed-one");
+            div.classList.remove("sunk-one");
             div.classList.remove("ship");
 
             // Update the ship's coordinates in the UI
         }
-        else if (playerBoard.board[x][y].status === 5) {
+        else if (player.gameboard.board[x][y].status === 5) {
             div.classList.add("near-ship");
-            div.classList.remove("empty");
-            div.classList.remove("missed");
-            div.classList.remove("sunk");
+            div.classList.remove("empty-one");
+            div.classList.remove("missed-one");
+            div.classList.remove("sunk-one");
             div.classList.remove("ship");
             
 
             // Update the ship's coordinates in the UI
-        }
-        else if (playerBoard.board[x][y].status === 3) {
-            div.classList.add("sunk");
-            div.classList.remove("empty");
-            div.classList.remove("missed");
-            div.classList.remove("hit");
+        } else if (player.gameboard.board[x][y].status === 3 && playerNumber === 1) {
+            div.classList.add("sunk-one");
+            div.classList.remove("empty-one");
+            div.classList.remove("missed-one");
+            div.classList.remove("hit-one");
             div.classList.remove("ship");
             //needs to update all squares of the ship to sunk
-            playerBoard.ships.forEach(ship => {
-                if (ship.name === playerBoard.board[x][y].ship) {
+            
+                player.gameboard.ships.forEach(ship => {
+                    if (ship.name === player.gameboard.board[x][y].ship) {
+                        ship.coords.forEach(coord => {
+                            const sunkSquare = document.querySelector(`.boardSquare-one[data-coord="${coord}"]`);
+                            if (sunkSquare) {
+                                sunkSquare.classList.add("sunk-one");
+                                updateScoreboard(playerOne.gameboard, playerOneShipsSunkUI, playerOneShipsRemainingUI);
+                                // updateScoreboard(playerTwo.gameboard, playerTwoShipsSunkUI, playerTwoShipsRemainingUI);
+                            }
+                        });
+                    }
+                });
+        } else if (player.gameboard.board[x][y].status === 3 && playerNumber === 2) {
+            div.classList.add("sunk-two");
+            div.classList.remove("empty-two");
+            div.classList.remove("missed-two");
+            div.classList.remove("hit-two");
+            div.classList.remove("ship");
+            
+            player.gameboard.ships.forEach(ship => {
+                if (ship.name === player.gameboard.board[x][y].ship) {
                     ship.coords.forEach(coord => {
-                        const sunkSquare = document.querySelector(`.boardSquare[data-coord="${coord}"]`);
+                        const sunkSquare = document.querySelector(`.boardSquare-two[data-coord="${coord}"]`);
                         if (sunkSquare) {
-                            sunkSquare.classList.add("sunk");
-                            updateScoreboard(playerBoard, playerShipsSunkUI, playerShipsRemainingUI);
+                            sunkSquare.classList.add("sunk-two");
+                            updateScoreboard(playerTwo.gameboard, playerTwoShipsSunkUI, playerTwoShipsRemainingUI);
+                            // updateScoreboard(playerOne.gameboard, playerOneShipsSunkUI, playerOneShipsRemainingUI);
                         }
                     });
                 }
             });
         }
+        
+        
         // div.classList.add("attacked");
         // Finish updating the UI based on the attack result
-        console.log(playerBoard.board[x][y].status);
-        console.log(playerBoard.board);
+        console.log(player.gameboard.board[x][y].status);
+        console.log(player.gameboard.board);
 
     });
-            // disableSquareClicks();
+            disableSquareClicks();
 };
 
 function disableSquareClicks() {
@@ -157,18 +208,28 @@ function disableSquareClicks() {
 }
 
 
-function floatingShips(player) {
-    player.gameboard.ships.forEach(ship => {
-        ship.coords.forEach(coord => {
-            const shipSquare = document.querySelector(`.boardSquare[data-coord="${coord}"]`);
-            if (shipSquare) {
-                shipSquare.classList.add("ship");
-            }
+function floatingShips(player, playerNumber) {
+    if (playerNumber === 1) {
+        player.gameboard.ships.forEach(ship => {
+            ship.coords.forEach(coord => {
+                const shipSquare = document.querySelector(`.boardSquare-one[data-coord="${coord}"]`);
+                if (shipSquare) {
+                    shipSquare.classList.add("ship");
+                }
+            });
         });
-    });
+
+    } else if (playerNumber === 2) {
+        player.gameboard.ships.forEach(ship => {
+            ship.coords.forEach(coord => {
+                const shipSquare = document.querySelector(`.boardSquare-two[data-coord="${coord}"]`);
+                if (shipSquare) {
+                    shipSquare.classList.add("ship");
+                }
+            });
+        });
+    }
 }
-// floatingShips();    
-                            
 
 // enterName.addEventListener("click", () => {
 //     const playerName = prompt("Enter your name:");

@@ -161,16 +161,16 @@ class Gameboard {
                         return
                     }
                     if (col > 0 ) { 
-                        if (this.board[row - 1][col - 1]) { // left of ship
+                        if (this.board[row - 1][col - 1] && this.board[row - 1][col - 1].status !== 1) { // left of ship
                             this.board[row - 1][col - 1] = {status: 5, coord: [row - 1, col - 1], ship: null, length: 0} 
                         }
-                        if (this.board[row][col - 1] ) { // above ship
+                        if (this.board[row][col - 1] && this.board[row][col - 1].status !== 1) { // above ship
                             this.board[row][col - 1] = {status: 5, coord: [row, col - 1], ship: null, length: 0} 
                         }
-                        if (this.board[row - 1][col + 1] ) { // right of ship
+                        if (this.board[row - 1][col + 1] && this.board[row - 1][col + 1].status !== 1) { // right of ship
                             this.board[row - 1][col + 1] = {status: 5, coord: [row - 1, col + 1], ship: null, length: 0} 
                         }
-                        if (this.board[row][col + 1]) {
+                        if (this.board[row][col + 1] && this.board[row][col + 1].status !== 1) {
                             this.board[row][col + 1] = {status: 5, coord: [row, col + 1], ship: null, length: 0} 
                         }
                     }
@@ -204,13 +204,13 @@ class Gameboard {
                         return
                     }
                     if (row > 0) {
-                        if (this.board[row - 1][col - 1]) {
+                        if (this.board[row - 1][col - 1] && this.board[row - 1][col - 1].status !== 1) { // left of ship
                             this.board[row - 1][col - 1] = {status: 5, coord: [row - 1, col - 1], ship: null, length: 0} 
                         }
-                        if (this.board[row - 1][col]) {
+                        if (this.board[row - 1][col] && this.board[row - 1][col].status !== 1) {
                             this.board[row - 1][col] = {status: 5, coord: [row - 1, col], ship: null, length: 0} 
                         }
-                        if (this.board[row - 1][col + 1]) {
+                        if (this.board[row - 1][col + 1] && this.board[row - 1][col + 1].status !== 1) {
                             this.board[row - 1][col + 1] = {status: 5, coord: [row - 1, col + 1], ship: null, length: 0} 
                         }
                     }
@@ -220,7 +220,7 @@ class Gameboard {
                     if (col < this.board[row].length - 1 && this.board[row][col + 1].status !== 1) {
                         this.board[row][col + 1] = {status: 5, coord: [row, col + 1], ship: null, length: 0} 
                     }
-                    if (row < this.board.length - 1) {
+                    if (row < this.board.length - 1 && this.board[row + 1][col].status !== 1) { // end of ship
                         this.board[row + 1][col - 1] = {status: 5, coord: [row + 1, col - 1], ship: null, length: 0} 
                         this.board[row + 1][col] = {status: 5, coord: [row + 1, col], ship: null, length: 0} 
                         this.board[row + 1][col + 1] = {status: 5, coord: [row + 1, col + 1], ship: null, length: 0} 

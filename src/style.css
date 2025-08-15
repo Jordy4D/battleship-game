@@ -38,7 +38,7 @@ body {
     margin-top: 20px;
 }
 
-.boardSquare {
+.boardSquare-one, .boardSquare-two {
     width: 50px;
     height: 50px;
     background-color: lightblue;
@@ -56,16 +56,20 @@ body {
     margin-top: 20px;
 }
 
-.missed {
+.missed-one, .missed-two {
     background-color: white;
 }
-.hit {
+.hit-one, .hit-two {
     background-color: red;
 }
-.sunk {
+.sunk-one, .sunk-two {
     background-color: black;
 }
 
 .ship {
     background-color: blue;
+}
+
+.near-ship {
+    background-color: yellow;
 }
