@@ -16,6 +16,12 @@ body {
     margin-top: 20px;
 }
 
+#game-status {
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
 .board-container {
     display: flex;
     justify-content: space-around;
@@ -50,6 +56,10 @@ body {
     border: 1px solid #000;
 }
 
+.boardSquare-one:hover, .boardSquare-two:hover {
+    opacity: .8;
+}
+
 .game-status {
     text-align: center;
     font-size: 1.5em;
@@ -72,4 +82,24 @@ body {
 
 .near-ship {
     background-color: yellow;
+}
+
+.attacked, .sunk-one, .sunk-two {
+    pointer-events: none;
+    cursor: default;
+}
+
+
+
+
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: grey;
+    cursor: not-allowed;
 }

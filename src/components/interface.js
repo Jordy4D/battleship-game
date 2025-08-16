@@ -25,11 +25,15 @@ const namePlayerTwo = "Two";
 const playerOne = new Player(namePlayerOne);
 const playerTwo = new Player(namePlayerTwo);
 
+let currentPlayer = playerOne; // Set the current player to player one initially
+
 // const gameboard = new Gameboard();
 // const testShip = new Ship("Destroyer", 4, [[0, 1], [0, 2], [0, 3], [0, 4]]);
 // gameboard.placeShip(0, 1, "Destroyer", 4, "h");
 
 function gameInit() {
+    
+    document.getElementById("current-player-name").textContent = namePlayerOne; // Set initial player name
 
     playerOne.gameboard.createBoard(10, 5)
     playerTwo.gameboard.createBoard(10, 5);
@@ -128,7 +132,6 @@ function addClickEventToSquares(div, player, playerNumber) {
             div.classList.remove("hit-one");
             div.classList.remove("sunk-one");
             div.classList.add("attacked");
-            
         }
         else if (player.gameboard.board[x][y].status === 2) {
             div.classList.add("hit-one");
@@ -136,6 +139,7 @@ function addClickEventToSquares(div, player, playerNumber) {
             div.classList.remove("missed-one");
             div.classList.remove("sunk-one");
             div.classList.remove("ship");
+            div.classList.add("attacked");
 
             // Update the ship's coordinates in the UI
         }
@@ -145,6 +149,7 @@ function addClickEventToSquares(div, player, playerNumber) {
             div.classList.remove("missed-one");
             div.classList.remove("sunk-one");
             div.classList.remove("ship");
+            div.classList.add("attacked");
             
 
             // Update the ship's coordinates in the UI
@@ -154,6 +159,8 @@ function addClickEventToSquares(div, player, playerNumber) {
             div.classList.remove("missed-one");
             div.classList.remove("hit-one");
             div.classList.remove("ship");
+            div.classList.add("attacked");
+
             //needs to update all squares of the ship to sunk
             
                 player.gameboard.ships.forEach(ship => {
@@ -174,12 +181,15 @@ function addClickEventToSquares(div, player, playerNumber) {
             div.classList.remove("missed-two");
             div.classList.remove("hit-two");
             div.classList.remove("ship");
+            div.classList.add("attacked");
+
             
             player.gameboard.ships.forEach(ship => {
                 if (ship.name === player.gameboard.board[x][y].ship) {
                     ship.coords.forEach(coord => {
                         const sunkSquare = document.querySelector(`.boardSquare-two[data-coord="${coord}"]`);
                         if (sunkSquare) {
+
                             sunkSquare.classList.add("sunk-two");
                             updateScoreboard(playerTwo.gameboard, playerTwoShipsSunkUI, playerTwoShipsRemainingUI);
                             // updateScoreboard(playerOne.gameboard, playerOneShipsSunkUI, playerOneShipsRemainingUI);
@@ -194,19 +204,27 @@ function addClickEventToSquares(div, player, playerNumber) {
         // Finish updating the UI based on the attack result
         console.log(player.gameboard.board[x][y].status);
         console.log(player.gameboard.board);
-
+        changePlayerTurn();
     });
-            disableSquareClicks();
 };
+disableSquareClicks();
 
 function disableSquareClicks() {
     gameboardSquare.forEach(square => {
         square.removeEventListener("click", () => {});
         square.classList.add("disabled");
-    }
-    );
+    });
 }
 
+function changePlayerTurn() {
+    if (currentPlayer === playerOne) {
+        currentPlayer = playerTwo;
+        document.getElementById("current-player-name").textContent = namePlayerTwo;
+    } else {
+        currentPlayer = playerOne;
+        document.getElementById("current-player-name").textContent = namePlayerOne;
+    }
+}
 
 function floatingShips(player, playerNumber) {
     if (playerNumber === 1) {

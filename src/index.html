@@ -10,6 +10,10 @@
         <div id="game-title">
             <h1>Battleship Game</h1>
         </div>
+        <div class="game-status" id="game-status">
+            <p id="status-message">Welcome to Battleship! Place your ships and get ready to play!</p>
+            <p id="current-player">Current Turn: <span id="current-player-name"></span></p>
+        </div>
         <div class="board-container">
             <div id="player-one-board">
                 <div class="header-container">
@@ -17,6 +21,13 @@
                 </div>
                 <div class="gameboard" id="gameboard-one">
                     <!-- Game board will be dynamically generated here -->
+                </div>
+                <div class="buttons-player-one">
+                    <button id="place-battleship-1" data="battleship">Place Battleship</button>
+                    <button id="place-cruiser-1" data="cruiser">Place Cruiser</button>
+                    <button id="place-submarine-1" data="submarine">Place Submarine</button>
+                    <button id="place-patrol-boat-1" data="patrol-boat">Place Patrol Boat</button>
+                    <button id="place-carrier-1" data="carrier">Place Carrier</button>
                 </div>
                 <div class="game-status">
                     <p id="player-one-ships-sunk">Ships Sunk: <span id="player-one-ships-sunk-value"></span></p>
@@ -29,6 +40,13 @@
                 </div>
                 <div class="gameboard" id="gameboard-two">
                     <!-- Game board will be dynamically generated here -->
+                </div>
+                <div class="buttons-player-two">
+                    <button id="place-battleship-2" data="battleship">Place Battleship</button>
+                    <button id="place-cruiser-2" data="cruiser">Place Cruiser</button>
+                    <button id="place-submarine-2" data="submarine">Place Submarine</button>
+                    <button id="place-patrol-boat-2" data="patrol-boat">Place Patrol Boat</button>
+                    <button id="place-carrier-2" data="carrier">Place Carrier</button>
                 </div>
                 <div class="game-status">
                     <p id="player-two-ships-sunk">Ships Sunk: <span id="player-two-ships-sunk-value"></span></p>
