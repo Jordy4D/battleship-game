@@ -89,7 +89,15 @@ body {
     cursor: default;
 }
 
+.off-turn {
+    pointer-events: auto;
+    background-color: blue;
+}
 
+.current-turn {
+    pointer-events: auto;
+    opacity: 1;
+}
 
 
 button {

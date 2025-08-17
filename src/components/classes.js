@@ -296,6 +296,8 @@ class Player {
     constructor(name) {
         this.name = name;
         this.gameboard = new Gameboard();
+        this.currentTurn = false; // Indicates if it's this player's turn
+        this.ships = []; // List of ships placed by this player
     }
 
     placeShip(row, col, name, length, dir) {
@@ -308,6 +310,10 @@ class Player {
 
     rename(newName) {
         this.name = newName;
+    }
+
+    __importShips() {
+        this.ships = this.gameboard.ships;
     }
 }
 

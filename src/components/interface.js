@@ -25,7 +25,9 @@ const namePlayerTwo = "Two";
 const playerOne = new Player(namePlayerOne);
 const playerTwo = new Player(namePlayerTwo);
 
-let currentPlayer = playerOne; // Set the current player to player one initially
+let currentPlayer = playerOne
+    playerOne.currentTurn = true;
+    playerTwo.currentTurn = false;
 
 // const gameboard = new Gameboard();
 // const testShip = new Ship("Destroyer", 4, [[0, 1], [0, 2], [0, 3], [0, 4]]);
@@ -47,29 +49,34 @@ function gameInit() {
     
     
     
-    playerOne.gameboard.placeShip(0, 0, "Carrier", 5, "h");
-    playerOne.gameboard.placeShip(5, 5, "Battleship", 4, "v");
-    playerOne.gameboard.placeShip(2, 2, "Patrol Boat", 2, "h");
-    playerOne.gameboard.placeShip(2, 7, "Submarine", 3, "h");
-    playerOne.gameboard.placeShip(7, 1, "Cruiser", 3, "v");
+    // playerOne.gameboard.placeShip(0, 0, "Carrier", 5, "h");
+    // playerOne.gameboard.placeShip(5, 5, "Battleship", 4, "v");
+    // playerOne.gameboard.placeShip(2, 2, "Patrol Boat", 2, "h");
+    // playerOne.gameboard.placeShip(2, 7, "Submarine", 3, "h");
+    // playerOne.gameboard.placeShip(7, 1, "Cruiser", 3, "v");
     
-    playerTwo.gameboard.placeShip(5, 6, "Battleship", 4, "v");
-    playerTwo.gameboard.placeShip(0, 3, "Carrier", 5, "h");
-    playerTwo.gameboard.placeShip(1, 2, "Patrol Boat", 2, "h");
-    playerTwo.gameboard.placeShip(3, 2, "Submarine", 3, "h");
-    playerTwo.gameboard.placeShip(6, 1, "Cruiser", 3, "v");
+    // playerTwo.gameboard.placeShip(5, 6, "Battleship", 4, "v");
+    // playerTwo.gameboard.placeShip(0, 3, "Carrier", 5, "h");
+    // playerTwo.gameboard.placeShip(1, 2, "Patrol Boat", 2, "h");
+    // playerTwo.gameboard.placeShip(3, 2, "Submarine", 3, "h");
+    // playerTwo.gameboard.placeShip(6, 1, "Cruiser", 3, "v");
+    
+    playerOne.__importShips();
+    playerTwo.__importShips();
+
+    
     
     // gameboardUI.innerHTML = generateBoardHTML(gameboard.board.length, gameboard.board[0].length);
     generatePlayerOneBoardHTML(playerOne, playerOneGameboardUI);
     generatePlayerTwoBoardHTML(playerTwo, playerTwoGameboardUI);
-
-
+    
+    
     playerOneNameUI.textContent = namePlayerOne; // Set initial player name
     playerTwoNameUI.textContent = namePlayerTwo; // Set initial player name
-
+    
     floatingShips(playerOne, 1);
     floatingShips(playerTwo, 2);
-
+    
     updateScoreboard(playerOne.gameboard, playerOneShipsSunkUI, playerOneShipsRemainingUI);
     updateScoreboard(playerTwo.gameboard, playerTwoShipsSunkUI, playerTwoShipsRemainingUI);
 }
@@ -89,6 +96,7 @@ function generatePlayerOneBoardHTML(player, playerUI) {
 
             addClickEventToSquares(squareDiv, player, 1);
             playerUI.appendChild(squareDiv);
+        
         }
     }
 }
@@ -127,6 +135,7 @@ function addClickEventToSquares(div, player, playerNumber) {
         player.receiveAttack(x, y);
 
         if (player.gameboard.board[x][y].status === 4) {
+            lastAttackRender(`${x}, ${y}`, "Miss");
             div.classList.add("missed-one");
             div.classList.remove("empty-one");
             div.classList.remove("hit-one");
@@ -134,6 +143,7 @@ function addClickEventToSquares(div, player, playerNumber) {
             div.classList.add("attacked");
         }
         else if (player.gameboard.board[x][y].status === 2) {
+            lastAttackRender(`${x}, ${y}`, "Hit");
             div.classList.add("hit-one");
             div.classList.remove("empty-one");
             div.classList.remove("missed-one");
@@ -144,6 +154,7 @@ function addClickEventToSquares(div, player, playerNumber) {
             // Update the ship's coordinates in the UI
         }
         else if (player.gameboard.board[x][y].status === 5) {
+            lastAttackRender(`${x}, ${y}`, "Near Miss");
             div.classList.add("near-ship");
             div.classList.remove("empty-one");
             div.classList.remove("missed-one");
@@ -154,6 +165,8 @@ function addClickEventToSquares(div, player, playerNumber) {
 
             // Update the ship's coordinates in the UI
         } else if (player.gameboard.board[x][y].status === 3 && playerNumber === 1) {
+            lastAttackRender(`${x}, ${y}`, "Sunk Ship");
+            
             div.classList.add("sunk-one");
             div.classList.remove("empty-one");
             div.classList.remove("missed-one");
@@ -176,6 +189,8 @@ function addClickEventToSquares(div, player, playerNumber) {
                     }
                 });
         } else if (player.gameboard.board[x][y].status === 3 && playerNumber === 2) {
+            lastAttackRender(`${x}, ${y}`, "Sunk Ship");
+            
             div.classList.add("sunk-two");
             div.classList.remove("empty-two");
             div.classList.remove("missed-two");
@@ -218,13 +233,51 @@ function disableSquareClicks() {
 
 function changePlayerTurn() {
     if (currentPlayer === playerOne) {
-        currentPlayer = playerTwo;
         document.getElementById("current-player-name").textContent = namePlayerTwo;
+        // playerChangeBoardRender();
+        currentPlayer = playerTwo; 
+        playerTwo.currentTurn = true;
+        playerOne.currentTurn = false;
+        console.log(currentPlayer);
+        console.log(playerOne);
+
     } else {
-        currentPlayer = playerOne;
         document.getElementById("current-player-name").textContent = namePlayerOne;
+
+        // playerChangeBoardRender();
+        currentPlayer = playerOne;
+        playerOne.currentTurn = true;
+        playerTwo.currentTurn = false;
+
+        console.log(currentPlayer);
     }
 }
+
+function lastAttackRender(coord, result) {
+    document.getElementById("last-attack-action").textContent = `(${coord}) - ${result}`;
+}
+
+// function playerChangeBoardRender() {
+//     if (currentPlayer === playerOne) {
+//         document.querySelectorAll('.boardSquare-one').forEach(square => {
+//             square.classList.add('current-turn');
+//             square.classList.remove('off-turn');
+//         });
+//     document.querySelectorAll('.boardSquare-two').forEach(square => {
+//             square.classList.add('off-turn');
+//             square.classList.remove('current-turn');
+//         });
+//     } else if (currentPlayer === playerTwo) {
+//         document.querySelectorAll('.boardSquare-two').forEach(square => {
+//             square.classList.add('current-turn');
+//             square.classList.remove('off-turn');
+//         });
+//         document.querySelectorAll('.boardSquare-one').forEach(square => {
+//             square.classList.add('off-turn');
+//             square.classList.remove('current-turn');
+//         });
+//     }
+// }
 
 function floatingShips(player, playerNumber) {
     if (playerNumber === 1) {
@@ -248,6 +301,88 @@ function floatingShips(player, playerNumber) {
         });
     }
 }
+
+
+document.getElementById('place-battleship-1').addEventListener('click', () => {
+    const row = parseInt(prompt("Enter the row (0-9) to place the Battleship:"));
+    const col = parseInt(prompt("Enter the column (0-9) to place the Battleship:"));
+    const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
+    if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
+        alert("Invalid input. Please try again.");
+        return;
+    }
+    playerOne.gameboard.placeShip(row, col, "Battleship", 4, orientation);
+    playerOneGameboardUI.innerHTML = ""; // Clear the game board UI
+    gameInit(); // Reinitialize the game board
+    // floatingShips(); // Reapply floating ships
+    // updateScoreboard(); // Update the scoreboard
+    console.log('Place Battleship button clicked for Player 1');
+})
+
+document.getElementById('place-cruiser-1').addEventListener('click', () => {
+    const row = parseInt(prompt("Enter the row (0-9) to place the Cruiser:"));
+    const col = parseInt(prompt("Enter the column (0-9) to place the Cruiser:"));
+    const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
+    if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
+        alert("Invalid input. Please try again.");
+        return;
+    }
+    playerOne.gameboard.placeShip(row, col, "Cruiser", 3, orientation);
+    playerOneGameboardUI.innerHTML = ""; // Clear the game board UI
+    gameInit(); // Reinitialize the game board
+    // floatingShips(); // Reapply floating ships
+    // updateScoreboard(); // Update the scoreboard
+    console.log('Place Cruiser button clicked for Player 1');
+})
+
+document.getElementById('place-submarine-1').addEventListener('click', () => {
+    const row = parseInt(prompt("Enter the row (0-9) to place the Submarine:"));
+    const col = parseInt(prompt("Enter the column (0-9) to place the Submarine:"));
+    const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
+    if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
+        alert("Invalid input. Please try again.");
+        return;
+    }
+    playerOne.gameboard.placeShip(row, col, "Submarine", 3, orientation);
+    playerOneGameboardUI.innerHTML = ""; // Clear the game board UI
+    gameInit(); // Reinitialize the game board
+    // floatingShips(); // Reapply floating ships
+    // updateScoreboard(); // Update the scoreboard
+    console.log('Place Submarine button clicked for Player 1');
+})
+
+document.getElementById('place-patrol-boat-1').addEventListener('click', () => {
+    const row = parseInt(prompt("Enter the row (0-9) to place the Patrol Boat:"));
+    const col = parseInt(prompt("Enter the column (0-9) to place the Patrol Boat:"));
+    const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
+    if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
+        alert("Invalid input. Please try again.");
+        return;
+    }
+    playerOne.gameboard.placeShip(row, col, "Patrol Boat", 2, orientation);
+    playerOneGameboardUI.innerHTML = ""; // Clear the game board UI
+    gameInit(); // Reinitialize the game board
+    // floatingShips(); // Reapply floating ships
+    // updateScoreboard(); // Update the scoreboard
+    console.log('Place Patrol Boat button clicked for Player 1');
+})
+
+document.getElementById('place-carrier-1').addEventListener('click', () => {
+    const row = parseInt(prompt("Enter the row (0-9) to place the Carrier:"));
+    const col = parseInt(prompt("Enter the column (0-9) to place the Carrier:"));
+    const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
+    if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
+        alert("Invalid input. Please try again.");
+        return;
+    }
+    playerOne.gameboard.placeShip(row, col, "Carrier", 5, orientation);
+    playerOneGameboardUI.innerHTML = ""; // Clear the game board UI
+    gameInit(); // Reinitialize the game board
+    // floatingShips(); // Reapply floating ships
+    // updateScoreboard(); // Update the scoreboard
+    console.log('Place Carrier button clicked for Player 1');
+})
+
 
 // enterName.addEventListener("click", () => {
 //     const playerName = prompt("Enter your name:");
