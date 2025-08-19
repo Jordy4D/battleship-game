@@ -81,6 +81,20 @@ function gameInit() {
     updateScoreboard(playerTwo.gameboard, playerTwoShipsSunkUI, playerTwoShipsRemainingUI);
 }
 
+function gameRerender(){
+    playerOneGameboardUI.innerHTML = ""; // Clear the game board UI
+    playerTwoGameboardUI.innerHTML = ""; // Clear the game board UI
+    generatePlayerOneBoardHTML(playerOne, playerOneGameboardUI);
+    generatePlayerTwoBoardHTML(playerTwo, playerTwoGameboardUI);
+    
+    floatingShips(playerOne, 1);
+    floatingShips(playerTwo, 2);
+    
+    updateScoreboard(playerOne.gameboard, playerOneShipsSunkUI, playerOneShipsRemainingUI);
+    updateScoreboard(playerTwo.gameboard, playerTwoShipsSunkUI, playerTwoShipsRemainingUI);
+}
+
+
 function generatePlayerOneBoardHTML(player, playerUI) {
 
     for (let i = 0; i < player.gameboard.board.length; i++) {
@@ -303,85 +317,7 @@ function floatingShips(player, playerNumber) {
 }
 
 
-document.getElementById('place-battleship-1').addEventListener('click', () => {
-    const row = parseInt(prompt("Enter the row (0-9) to place the Battleship:"));
-    const col = parseInt(prompt("Enter the column (0-9) to place the Battleship:"));
-    const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
-    if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
-        alert("Invalid input. Please try again.");
-        return;
-    }
-    playerOne.gameboard.placeShip(row, col, "Battleship", 4, orientation);
-    playerOneGameboardUI.innerHTML = ""; // Clear the game board UI
-    gameInit(); // Reinitialize the game board
-    // floatingShips(); // Reapply floating ships
-    // updateScoreboard(); // Update the scoreboard
-    console.log('Place Battleship button clicked for Player 1');
-})
 
-document.getElementById('place-cruiser-1').addEventListener('click', () => {
-    const row = parseInt(prompt("Enter the row (0-9) to place the Cruiser:"));
-    const col = parseInt(prompt("Enter the column (0-9) to place the Cruiser:"));
-    const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
-    if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
-        alert("Invalid input. Please try again.");
-        return;
-    }
-    playerOne.gameboard.placeShip(row, col, "Cruiser", 3, orientation);
-    playerOneGameboardUI.innerHTML = ""; // Clear the game board UI
-    gameInit(); // Reinitialize the game board
-    // floatingShips(); // Reapply floating ships
-    // updateScoreboard(); // Update the scoreboard
-    console.log('Place Cruiser button clicked for Player 1');
-})
-
-document.getElementById('place-submarine-1').addEventListener('click', () => {
-    const row = parseInt(prompt("Enter the row (0-9) to place the Submarine:"));
-    const col = parseInt(prompt("Enter the column (0-9) to place the Submarine:"));
-    const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
-    if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
-        alert("Invalid input. Please try again.");
-        return;
-    }
-    playerOne.gameboard.placeShip(row, col, "Submarine", 3, orientation);
-    playerOneGameboardUI.innerHTML = ""; // Clear the game board UI
-    gameInit(); // Reinitialize the game board
-    // floatingShips(); // Reapply floating ships
-    // updateScoreboard(); // Update the scoreboard
-    console.log('Place Submarine button clicked for Player 1');
-})
-
-document.getElementById('place-patrol-boat-1').addEventListener('click', () => {
-    const row = parseInt(prompt("Enter the row (0-9) to place the Patrol Boat:"));
-    const col = parseInt(prompt("Enter the column (0-9) to place the Patrol Boat:"));
-    const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
-    if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
-        alert("Invalid input. Please try again.");
-        return;
-    }
-    playerOne.gameboard.placeShip(row, col, "Patrol Boat", 2, orientation);
-    playerOneGameboardUI.innerHTML = ""; // Clear the game board UI
-    gameInit(); // Reinitialize the game board
-    // floatingShips(); // Reapply floating ships
-    // updateScoreboard(); // Update the scoreboard
-    console.log('Place Patrol Boat button clicked for Player 1');
-})
-
-document.getElementById('place-carrier-1').addEventListener('click', () => {
-    const row = parseInt(prompt("Enter the row (0-9) to place the Carrier:"));
-    const col = parseInt(prompt("Enter the column (0-9) to place the Carrier:"));
-    const orientation = prompt("Enter the orientation (h for horizontal, v for vertical):").toLowerCase();
-    if (isNaN(row) || isNaN(col) || (orientation !== 'h' && orientation !== 'v')) {
-        alert("Invalid input. Please try again.");
-        return;
-    }
-    playerOne.gameboard.placeShip(row, col, "Carrier", 5, orientation);
-    playerOneGameboardUI.innerHTML = ""; // Clear the game board UI
-    gameInit(); // Reinitialize the game board
-    // floatingShips(); // Reapply floating ships
-    // updateScoreboard(); // Update the scoreboard
-    console.log('Place Carrier button clicked for Player 1');
-})
 
 
 // enterName.addEventListener("click", () => {
@@ -431,4 +367,4 @@ function test() {
 
 
 
-export { test, gameInit };
+export { test, gameInit, playerOne, playerTwo, currentPlayer, gameRerender, lastAttackRender, floatingShips, updateScoreboard, generatePlayerOneBoardHTML, generatePlayerTwoBoardHTML, disableSquareClicks, changePlayerTurn };

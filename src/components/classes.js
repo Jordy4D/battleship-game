@@ -157,7 +157,7 @@ class Gameboard {
                         this.board[row][col + 1] = {status: 5, coord: [row, col + 1], ship: null, length: 0};
                     }
 
-                    if (row >= this.board.length - 1) { // skips placement where the board runs to the end
+                    if (row >= this.board.length - 1 || row === 0) { // skips placement where the board runs to the end
                         return
                     }
                     if (col > 0 ) { 
@@ -200,7 +200,7 @@ class Gameboard {
                     const col = coord[1]
                     // update surrounding squares
 
-                    if (col >= this.board[row].length - 1) { // skips placement where the board runs to the end
+                    if (col >= this.board[row].length - 1 || col === 0) { // skips placement where the board runs to the end
                         return
                     }
                     if (row > 0) {
